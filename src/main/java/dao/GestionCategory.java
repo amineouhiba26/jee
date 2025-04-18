@@ -42,4 +42,27 @@ public class GestionCategory implements IGestionCategorie {
         }
         tx.commit();
     }
+
+    @Override
+    public void updateCategorie(Categorie updatedCategorie) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            Categorie existingCategorie = em.find(Categorie.class, updatedCategorie.getId());
+            if (existingCategorie != null) {
+                existingCategorie.setNom(updatedCategorie.getNom());
+                // if you add more fields in the future, update them here too
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
 }

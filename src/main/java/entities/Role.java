@@ -1,8 +1,18 @@
 package entities;
 
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
+    @OneToMany(mappedBy ="role" ,   cascade = CascadeType.ALL)
+    private List<User> users;
 
     public Role(int id, String name) {
         this.id = id;

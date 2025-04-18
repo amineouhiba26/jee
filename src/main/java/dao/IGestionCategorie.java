@@ -11,6 +11,6 @@ public interface IGestionCategorie {
     List<Categorie> getCategories();
     Categorie getCategorie(int id);
     void deleteCategorie(int id);
+    void updateCategorie(Categorie updatedCategorie) ;
 
-
-}
+    }

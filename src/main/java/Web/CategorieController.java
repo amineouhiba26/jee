@@ -58,8 +58,9 @@ public class CategorieController extends HttpServlet {
 
             if (idParam != null && !idParam.trim().isEmpty()) {
                 categorie.setId(Integer.parseInt(idParam));
+                gestion.updateCategorie(categorie); // 🔄 UPDATE if id exists
             } else {
-                gestion.addCategorie(categorie);
+                gestion.addCategorie(categorie);    // ➕ ADD if no id
             }
 
             response.sendRedirect("categorie");

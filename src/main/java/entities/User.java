@@ -1,10 +1,7 @@
 package entities;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
@@ -14,6 +11,9 @@ public class User {
     private int id ;
     private String name ;
     private String password ;
+
+    @ManyToOne
+    private Role role ;
 
 
     public User(int id, String name, String password) {
@@ -47,5 +47,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

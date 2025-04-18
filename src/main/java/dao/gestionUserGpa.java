@@ -1,5 +1,6 @@
 package dao;
 
+import entities.Role;
 import entities.User;
 
 import javax.persistence.*;
@@ -57,4 +58,35 @@ public class gestionUserGpa implements IGestionUser {
             et.commit();
 
     }
+
+    @Override
+    public boolean isAdmin(User u) {
+        return u.getRole() != null && "admin".equalsIgnoreCase(u.getRole().getName());
+    }
+
+
+    @Override
+    public void makeAdmin(int id) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = em.getTransaction();
+
+        try {
+            et.begin();
+            User user = em.find(User.class, id);
+            if (user != null) {
+                Role adminRole = em.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class)
+                    .setParameter("name", "admin")
+                    .getSingleResult();
+                user.setRole(adminRole);
+                em.merge(user);
+            }
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
 }
