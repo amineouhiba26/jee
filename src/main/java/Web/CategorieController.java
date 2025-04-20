@@ -2,7 +2,10 @@ package Web;
 
 import dao.GestionCategory;
 import dao.IGestionCategorie;
+import dao.IGestionProduit;
+import dao.gestionProduitGpa;
 import entities.Categorie;
+import entities.Produit;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,10 +18,12 @@ public class CategorieController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     IGestionCategorie gestion;
+    IGestionProduit gestion2 ;
 
     @Override
     public void init() throws ServletException {
         gestion = new GestionCategory();
+        gestion2 = new gestionProduitGpa() ;
     }
 
     @Override
@@ -28,6 +33,15 @@ public class CategorieController extends HttpServlet {
 
         if ("delete".equals(action) && idParam != null) {
             int id = Integer.parseInt(idParam);
+
+            // First nullify the category reference in products
+            List<Produit> products = gestion2.getProductsByCategory(id);
+            for (Produit p : products) {
+                p.setCategorie(null);
+                gestion2.updateProduct(p);
+            }
+
+            // Then delete the category
             gestion.deleteCategorie(id);
             response.sendRedirect("categorie");
             return;
@@ -58,9 +72,9 @@ public class CategorieController extends HttpServlet {
 
             if (idParam != null && !idParam.trim().isEmpty()) {
                 categorie.setId(Integer.parseInt(idParam));
-                gestion.updateCategorie(categorie); // 🔄 UPDATE if id exists
+                gestion.updateCategorie(categorie);
             } else {
-                gestion.addCategorie(categorie);    // ➕ ADD if no id
+                gestion.addCategorie(categorie);
             }
 
             response.sendRedirect("categorie");

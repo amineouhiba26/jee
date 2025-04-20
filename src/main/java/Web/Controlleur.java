@@ -36,7 +36,6 @@ public class Controlleur extends HttpServlet {
         String idParam = request.getParameter("id");
         String view = request.getParameter("view");
 
-        // Always fetch categories for product-related pages
         List<Categorie> categoriesList = gestionCategorie.getCategories();
         request.setAttribute("categories", categoriesList);
 
@@ -66,12 +65,27 @@ public class Controlleur extends HttpServlet {
                     int id = Integer.parseInt(idParam);
                     Produit produitToAdd = gestion.getProduct(id);
 
+                    // Set default quantity to 1 if not specified
+                    int quantity = request.getParameter("quantity") != null ?
+                        Integer.parseInt(request.getParameter("quantity")) : 1;
+                    produitToAdd.setOrderedQuantity(quantity);
+
                     List<Produit> cart = (List<Produit>) session.getAttribute("cart");
                     if (cart == null) {
                         cart = new ArrayList<>();
                     }
 
-                    boolean exists = cart.stream().anyMatch(p -> p.getId() == produitToAdd.getId());
+                    // Check if product already exists in cart
+                    boolean exists = false;
+                    for (Produit p : cart) {
+                        if (p.getId() == produitToAdd.getId()) {
+                            // Update quantity if product exists
+                            p.setOrderedQuantity(p.getOrderedQuantity() + quantity);
+                            exists = true;
+                            break;
+                        }
+                    }
+
                     if (!exists) {
                         cart.add(produitToAdd);
                     }

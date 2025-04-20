@@ -24,6 +24,7 @@
                     <th>Nom</th>
                     <th>Prix</th>
                     <th>Quantité</th>
+                    <th>Total</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -33,7 +34,8 @@
                         <td>${p.id}</td>
                         <td>${p.nom}</td>
                         <td>${p.prix}</td>
-                        <td>${p.quantite}</td>
+                        <td>${p.orderedQuantity}</td>
+                        <td>${p.getTotalPrice()} €</td>
                         <td>
                             <a href="Controlleur?action=removeFromCart&id=${p.id}" class="btn btn-danger btn-sm">Retirer</a>
                         </td>

@@ -66,4 +66,30 @@ public class gestionProduitGpa implements IGestionProduit {
             et.commit();
 
     }
+
+    @Override
+    public void detachProductsFromCategory(int categoryId) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+            Query query = em.createQuery(
+                "UPDATE Produit p SET p.categorie = NULL WHERE p.categorie.id = :categoryId");
+            query.setParameter("categoryId", categoryId);
+            query.executeUpdate();
+            et.commit();
+
+    }
+
+    @Override
+    public List<Produit> getProductsByCategory(int categoryId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Query query = em.createQuery("SELECT p FROM Produit p WHERE p.categorie.id = :catId");
+            query.setParameter("catId", categoryId);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
 }

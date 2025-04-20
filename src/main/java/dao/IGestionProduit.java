@@ -10,4 +10,10 @@ public interface IGestionProduit {
     List<Produit> getProductsByMc(String mc);
     void updateProduct(Produit p);
     void deleteProduct(int id);
+
+    void detachProductsFromCategory(int categoryId);
+
+    List<Produit> getProductsByCategory(int id);
+
+
 }

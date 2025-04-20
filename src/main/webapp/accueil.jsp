@@ -68,10 +68,16 @@
                         <td>${p.quantite}</td>
                         <td>${p.categorie.nom}</td>
                         <td>
-                            <c:if
-                                test="${sessionScope.user.role.name !='ADMIN'}">
-
-                                <a href="Controlleur?action=addToCart&id=${p.id}" class="btn btn-info btn-sm">Ajouter au panier</a>
+                            <c:if test="${sessionScope.user.role.name !='ADMIN'}">
+                                <form method="get" action="Controlleur" class="d-inline">
+                                    <input type="hidden" name="action" value="addToCart">
+                                    <input type="hidden" name="id" value="${p.id}">
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <input type="number" name="quantity" min="1" max="${p.quantite}"
+                                               value="1" class="form-control">
+                                        <button type="submit" class="btn btn-info btn-sm">Ajouter</button>
+                                    </div>
+                                </form>
                             </c:if>
 
                             <c:if test="${sessionScope.user.role.name == 'ADMIN'}">

@@ -37,7 +37,6 @@ public class LoginController extends HttpServlet {
 
         for (User user : users) {
             if (user.getName().equals(name) && user.getPassword().equals(password)) {
-                // Authenticated
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
 
@@ -45,13 +44,11 @@ public class LoginController extends HttpServlet {
                     response.sendRedirect("Controlleur"); //
                 } else {
                     response.sendRedirect("Controlleur");
-                    // Or
                 }
                 return;
             }
         }
 
-        // Auth failed
         request.setAttribute("error", "Nom ou mot de passe incorrect");
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }

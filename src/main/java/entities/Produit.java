@@ -1,5 +1,7 @@
 package entities;
 
+import com.sun.istack.Nullable;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,8 +13,12 @@ public class Produit {
     private String nom;
     private double prix;
     private int quantite;
+    @Transient
+    private int orderedQuantity = 1;
+
 
     @ManyToOne
+    @JoinColumn(name = "categorie_id", nullable = true)
     private Categorie categorie;
 
     public Produit() {}
@@ -37,4 +43,15 @@ public class Produit {
     public void setPrix(double prix) { this.prix = prix; }
     public void setQuantite(int quantite) { this.quantite = quantite; }
     public void setCategorie(Categorie categorie) { this.categorie = categorie; }
+    public int getOrderedQuantity() {
+        return orderedQuantity;
+    }
+
+    public void setOrderedQuantity(int orderedQuantity) {
+        this.orderedQuantity = orderedQuantity;
+    }
+
+    public double getTotalPrice() {
+        return this.prix * this.orderedQuantity;
+    }
 }
